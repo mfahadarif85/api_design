@@ -19,13 +19,21 @@ app.use(customLogger("Custom Logger"));
 app.use(cors());
 
 app.get("/", (req, res) => {
-  console.log("hello from express js");
-  res.status(200);
-  res.json("Hello");
+  throw new Error("hello");
 });
 
 app.use("/api", protect, router);
 app.post("/user", createNewUser);
 app.post("/signin", signIn);
+
+app.use((err, req, res, next) => {
+  if (err.type === "auth") {
+    res.status(401).json({ message: "unauthorized" });
+  } else if (err.type === "input") {
+    res.status(400).json({ message: "invalid input" });
+  } else {
+    res.status(500).json({ messgae: `oops, that's our fault` });
+  }
+});
 
 export default app;
