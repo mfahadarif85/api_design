@@ -19,7 +19,7 @@ app.use(customLogger("Custom Logger"));
 app.use(cors());
 
 app.get("/", (req, res) => {
-  throw new Error("hello");
+  res.json({ message: "hello" });
 });
 
 app.use("/api", protect, router);
